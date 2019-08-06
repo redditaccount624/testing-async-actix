@@ -12,3 +12,5 @@ tokio = { git = "https://github.com/tokio-rs/tokio", default-features = false, f
 
 actix_web_async_compat = { git = "https://github.com/saks/actix_web_async_compat.git" }
 serde = { version = "1.0", features = ["derive"] }
+
+futures = "0.1"

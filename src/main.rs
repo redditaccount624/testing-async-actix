@@ -1,15 +1,14 @@
-#![feature(await_macro, async_await)]
+#![feature(async_await)]
 
 use actix_web::{get, web, App, Error, HttpResponse, HttpServer, Result};
 use actix_web_async_compat::async_compat;
 use futures03::{compat::Future01CompatExt as _, FutureExt as _, TryFutureExt as _};
-use hyper::Client;
 use serde::Deserialize;
 use std::{
     io,
     time::{Duration, Instant},
 };
-use tokio::prelude::*;
+use futures::Future;
 
 #[async_compat]
 async fn index() -> Result<HttpResponse> {
@@ -32,7 +31,7 @@ fn main() {
     HttpServer::new(|| {
         App::new()
             .wrap(actix_web::middleware::Logger::default())
-            .service(index)
+            .service(web::resource("/").route(web::get().to_async(index)))
             .service(web::resource("/welcome2").route(web::post().to_async(index2)))
     })
     .bind("127.0.0.1:8080")
